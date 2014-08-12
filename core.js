@@ -14,7 +14,7 @@ var core = function(){
 
 	//Start with the progress bar
 	//Progress bar!
-	 $("#progressbar").progressbar({
+	$("#progressbar").progressbar({
 		value: false
 	});
 	
@@ -27,8 +27,6 @@ var core = function(){
 		var rssData = JSON.parse(data);	
 		var content = "";
 		
-		console.log(rssData);
-
 		//Loop through the data.
 		for(var i = 0; i < Math.min(rssData.length / 2, MAX_RSS_ITEMS); i++){
 			content += makeHeader(rssData[i]);
@@ -81,10 +79,6 @@ var searchSteamStorefront = function(url, caller, newTitle){
 		}
 		
 		if(allIds.length > 0){
-			$("#progressbar").hide();
-			flyingDutchman(caller.data("sanitized-title"));
-			//Assumes steamDB got the guess right.
-			getPricesAndScore(allIds[0]);
 			if(typeof(caller)==="undefined"){
 			
 			}else{
@@ -92,6 +86,8 @@ var searchSteamStorefront = function(url, caller, newTitle){
 				//It's been succesful, so we rename our caller.
 				caller.data("sanitized-title", newTitle.join(" "));
 			}
+			//Assumes steamDB got the guess right.
+			getPricesAndScore(allIds[0], caller.data("sanitized-title"));
 		}else{
 			//Failed.
 			failedPricesAndScore(caller);
@@ -103,7 +99,7 @@ var searchSteamStorefront = function(url, caller, newTitle){
 * Retreives Pricing and Metacritic info
 * from the game with the given AppID
 */
-var getPricesAndScore = function(bestGuess){
+var getPricesAndScore = function(bestGuess, name){
 	//Remove the content from the div
 	$("#twitchArea").html("");
 	$.get("/?steam=" + bestGuess, function(data){
@@ -138,8 +134,8 @@ var getPricesAndScore = function(bestGuess){
 		//Add the content to the div
 		$("#twitchArea").html(content);
 		
-		//End the progress bar
-		$("#progressbar").hide();
+		//Try getting twitch videos next
+		flyingDutchman(name);
 		
 	});
 }
@@ -159,6 +155,7 @@ var flyingDutchman = function(game){
 		//Loop through the data
 		for(var i = 0; i < Math.min(kraken.streams.length, MAX_STREAM_PREVIEW); i++){
 			content += makeStreamLink(kraken.streams[i]);
+			$("#" + kraken.streams[i]._id).colorbox({iframe:true, innerWidth:640, innerHeight:390});
 		}
 		
 		$("#twitchArea").html($("#twitchArea").html() + content);
@@ -210,7 +207,7 @@ var makeURL = function(item){
 * a traditional <img> element.
 */
 var makeStreamLink = function(stream){
-	return "<img class=\"twitch-preview\" src=\"" + stream.preview.medium + "\"/><br />"; 
+	return "<a id=\"" + stream._id + "\"href=\"\"><img class=\"twitch-preview\" src=\"" + stream.preview.medium + "\"/></a><br />"; 
 }
 
 
@@ -232,5 +229,17 @@ var makeHeader = function(item){
 */
 var makeSummary = function(item){
 	return "<div><p>" + item.summary + "</p></div>";
+}
+
+/**
+* Helper function for progress bar.
+*/
+var adjustProgress = function(delta){
+	var d = $("#progressbar").progressbar("option", "value");
+
+	$("#progressbar").progressbar( 
+	"option", {
+		value: d + delta
+	});
 }
 
