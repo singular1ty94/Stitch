@@ -1,0 +1,36 @@
+<!-- 
+INB356 Assessment 1
+Author: Brett Orr | n8963398
+File: index.html
+Purpose: The entry point to the app.
+-->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Stitch - Steam with Twitch</title>
+    <link rel="stylesheet" href="style/main.css" type="text/css" media="screen" />
+	<link rel="icon" type="image/x-icon" href="favicon.ico"/>
+    <link href="jquery-ui/jquery-ui.css" rel="stylesheet" />
+    <script src="jquery-ui/external/jquery/jquery.js"></script>
+	<script src="jquery-ui/jquery-ui.js"></script>
+	<script src="core.js"></script>
+</head>
+<body>
+	<header>
+	    <img src="images/StitchLogo.png" alt="Stitch Logo" />
+	    <h1>Steam with Twitch</h1>
+	</header>
+	<div id="progressbar"></div>
+	<div id="container">
+    	<div id="contentArea"></div>
+    	<div id="twitchArea"></div>
+    </div>
+    <script type="text/javascript">        
+        $(document).ready(function(){
+        	//Start running the client-side scripts.
+        	core();
+        });
+    </script>
+</body>
+</html>
