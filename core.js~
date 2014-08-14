@@ -1,6 +1,5 @@
 /**
-* INB356 Assessment 1
-* Brett Orr - n8963398
+* Stitch - Steam with Twitch
 * File: core.js
 * Purpose: The core javascript file, run in the client,
 * 			that iterates through returned content, edits
@@ -8,13 +7,12 @@
 *			Each AJAX call relies on the success of the 
 *			parent.
 */
-var MAX_STREAM_PREVIEW = 3;
-var MAX_RSS_ITEMS = 10;
+
 var core = function(){
 
 	//Start with the progress bar
 	//Progress bar!
-	 $("#progressbar").progressbar({
+	$("#progressbar").progressbar({
 		value: false
 	});
 	
@@ -28,7 +26,7 @@ var core = function(){
 		var content = "";
 		
 		//Loop through the data.
-		for(var i = 0; i < Math.min(rssData.length / 2, MAX_RSS_ITEMS); i++){
+		for(var i = 0; i < Math.min(rssData.length / 2, config.MAX_RSS_ITEMS); i++){
 			content += makeHeader(rssData[i]);
 			//content += makeURL(rssData[i]) + "<br />";	//Making an anchor out of the article.
 			content += makeSummary(rssData[i]);	//Make the (hidden) summary div.		
@@ -79,7 +77,7 @@ var searchSteamStorefront = function(url, caller, newTitle){
 		}
 		
 		if(allIds.length > 0){
-			if(typeof(caller)==="undefined"){
+			if(typeof(newTitle)==="undefined"){
 			
 			}else{
 				//Hey, not the first time we've called this.
@@ -151,16 +149,29 @@ var flyingDutchman = function(game){
 		//Our retreived data
 		var kraken = JSON.parse(data);
 		
+		console.log(kraken);
+		
 		var content = "";
 		//Loop through the data
-		for(var i = 0; i < Math.min(kraken.streams.length, MAX_STREAM_PREVIEW); i++){
-			content += makeStreamLink(kraken.streams[i]);
-			$("#" + kraken.streams[i]._id).colorbox({iframe:true, innerWidth:640, innerHeight:390});
+		if(kraken.streams.length > 0){
+			for(var i = 0; i < Math.min(kraken.streams.length, config.MAX_STREAM_PREVIEW); i++){
+				content += makeStreamLink(kraken.streams[i]);
+			}
+		}else{
+			content += "<br /><br />Nobody's streaming right now.<br />Try again later!";
 		}
-		
 		$("#twitchArea").html($("#twitchArea").html() + content);
 		//End the progress bar
 		$("#progressbar").hide();
+		
+		//Attack the colorbox.
+		$(".streamLink").colorbox({inline:true, innerWidth:640, innerHeight:390});
+		
+		//Register the streams
+		$(".streamLink").click(function(){
+			$("#twitchPlayerObject").data("", "http://www.twitch.tv/widgets/live_embed_player.swf?channel=" + $(this).data("channel"));
+			$("#twitchMovie").attr("value", "hostname=www.twitch.tv&channel=" +  $(this).data("channel") + "&auto_play=true&start_volume=25");
+		});
 		
 	});
 }
@@ -207,7 +218,7 @@ var makeURL = function(item){
 * a traditional <img> element.
 */
 var makeStreamLink = function(stream){
-	return "<a id=\"" + stream._id + "\"href=\"\"><img class=\"twitch-preview\" src=\"" + stream.preview.medium + "\"/></a><br />"; 
+	return "<a class=\"streamLink\" id=\"" + stream._id + "\"href=\"#twitchPlayer\" data-channel=\"" + stream.channel.name + "\"><img class=\"twitch-preview\" src=\"" + stream.preview.medium + "\"/></a><br />"; 
 }
 
 

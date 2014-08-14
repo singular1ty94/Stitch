@@ -1,6 +1,5 @@
 /**
-* INB356 Assessment 1
-* Brett Orr - n8963398
+* Stitch - Steam with Twitch
 * File: server.js
 * Purpose: The main node.js server file to instantiate and operate a server.
 *			To form clear seperation between server and client, the server
@@ -29,16 +28,18 @@ var MIME_TYPES = {
     ".ico" : "image/x-icon"
 }
 
-/******** CONFIG *********
- Configure your port here.
- *************************/
-var PORT = 8888;
-
+//Load the config file.
+try{
+	eval(fs.readFileSync('config.js', encoding="ascii"));
+}catch(err){
+	console.log("[FATAL] Configuration error.");
+}
 
 /*
 * Blank constructor. Uses prototyping to add additional features.
 */
-function Server() { }
+function Server() { 
+}
 
 /**
 * This method takes the incoming request, parses the URL
@@ -227,7 +228,7 @@ Server._storefront = function(appID, response){
 Server._flyingDutchman = function(game, response){
 	//The method's name is a reference to Pirates of the Caribbean, go watch the trilogy if you haven't seen it!
 	//The steamdb url to go to.
-	var kraken = 'https://api.twitch.tv/kraken/search/streams?query=' + game;
+	var kraken = 'https://api.twitch.tv/kraken/search/streams?query=' + game + '&type=suggest';
 	
 	//Need these options to coax kraken into beleiving we're a real client.
 	var options = {
@@ -258,7 +259,7 @@ var Server$ = {
 
 (function() {
   var host = '127.0.0.1';   //localhost.
-  var port = PORT;			//from the config
+  var port = config.PORT;			//from the config
   try {
     http.createServer(Server.process).listen(port, host);
     console.log('Server running and live on http://' + host + ':' + port);

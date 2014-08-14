@@ -1,6 +1,5 @@
 /**
-* INB356 Assessment 1
-* Brett Orr - n8963398
+* Stitch - Steam with Twitch
 * File: server.js
 * Purpose: The main node.js server file to instantiate and operate a server.
 *			To form clear seperation between server and client, the server
@@ -26,19 +25,22 @@ var MIME_TYPES = {
     ".html":"text/html",
     ".css":"text/css",
     ".js" : "text/js",
-    ".ico" : "image/x-icon"
+    ".ico" : "image/x-icon",
+    ".png" : "image/png"
 }
 
-/******** CONFIG *********
- Configure your port here.
- *************************/
-var PORT = 8888;
-
+//Load the config file.
+try{
+	eval(fs.readFileSync('config.js', encoding="ascii"));
+}catch(err){
+	console.log("[FATAL] Configuration error.");
+}
 
 /*
 * Blank constructor. Uses prototyping to add additional features.
 */
-function Server() { }
+function Server() { 
+}
 
 /**
 * This method takes the incoming request, parses the URL
@@ -258,7 +260,7 @@ var Server$ = {
 
 (function() {
   var host = '127.0.0.1';   //localhost.
-  var port = PORT;			//from the config
+  var port = config.PORT;			//from the config
   try {
     http.createServer(Server.process).listen(port, host);
     console.log('Server running and live on http://' + host + ':' + port);
