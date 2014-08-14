@@ -22,6 +22,8 @@ var RSS_FEED = "http://feeds.ign.com/ign/pc-reviews/";
 
 //The . is important here.
 var MIME_TYPES = {
+	".json":"application/json",
+	".rss": "application/rss+xml",
     ".html":"text/html",
     ".css":"text/css",
     ".js" : "text/js",
@@ -33,7 +35,7 @@ var MIME_TYPES = {
 try{
 	eval(fs.readFileSync('config.js', encoding="ascii"));
 }catch(err){
-	console.log("[FATAL] Configuration error.");
+	console.log("[FATAL] Configuration error: " + err);
 }
 
 /*

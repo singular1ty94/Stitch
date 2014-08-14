@@ -165,15 +165,17 @@
 	cursor: pointer;
 	position: relative;
 	margin: 2px 0 0 0;
-	padding: 0 .5em .5em .7em;
+	padding: .5em .5em .5em .7em;
 	min-height: 0; /* support: IE7 */
 	font-size: 100%;
 }
 .ui-accordion .ui-accordion-icons {
 	padding-left: 1.2em;
+	display:none;
 }
 .ui-accordion .ui-accordion-icons .ui-accordion-icons {
 	padding-left: 1.2em;
+	display:none;
 }
 .ui-accordion .ui-accordion-header .ui-accordion-header-icon {
 	/*position: absolute;
@@ -181,6 +183,7 @@
 	top: 50%;
 	margin-top: -8px;*/
 	visibility:hidden;
+	display:none;
 }
 .ui-accordion .ui-accordion-content {
 	padding: 1em 2.2em;

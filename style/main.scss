@@ -46,6 +46,18 @@ header{
 	width:500px;
 	color:white;
 	text-align:left;
+
+	h3{
+		position:relative;
+		display:block;
+	}
+
+	h3 span{
+		font-size:65%;
+		display:block;
+		vertical-align:middle;
+		position:relative;
+	}
 }
 
 //This area is just used for the twitch video

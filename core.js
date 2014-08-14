@@ -25,6 +25,8 @@ var core = function(){
 		var rssData = JSON.parse(data);	
 		var content = "";
 		
+		console.log(rssData);
+		
 		//Loop through the data.
 		for(var i = 0; i < Math.min(rssData.length / 2, config.MAX_RSS_ITEMS); i++){
 			content += makeHeader(rssData[i]);
@@ -149,8 +151,6 @@ var flyingDutchman = function(game){
 		//Our retreived data
 		var kraken = JSON.parse(data);
 		
-		console.log(kraken);
-		
 		var content = "";
 		//Loop through the data
 		if(kraken.streams.length > 0){
@@ -164,7 +164,7 @@ var flyingDutchman = function(game){
 		//End the progress bar
 		$("#progressbar").hide();
 		
-		//Attack the colorbox.
+		//Attach the colorbox.
 		$(".streamLink").colorbox({inline:true, innerWidth:640, innerHeight:390});
 		
 		//Register the streams
@@ -230,7 +230,8 @@ var makeStreamLink = function(stream){
 var makeHeader = function(item){
 	var sanitizedtitle = item.title.replace("Review", "");
 	
-	return "<h3 class=\"rss-header\" data-sanitized-title=\"" + sanitizedtitle + "\">" + sanitizedtitle + "</h3>";
+	return "<h3 class=\"rss-header\" data-sanitized-title=\"" + sanitizedtitle + "\">" + sanitizedtitle + 
+	"<span>" + item.author + "</span></h3>";
 }
 
 /**
