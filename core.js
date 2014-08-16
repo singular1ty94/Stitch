@@ -165,7 +165,12 @@ var flyingDutchman = function(game){
 		$("#progressbar").hide();
 		
 		//Attach the colorbox.
-		$(".streamLink").colorbox({inline:true, innerWidth:640, innerHeight:390});
+		$(".streamLink").colorbox({inline:true, innerWidth:670, innerHeight:410, onClosed: function(){
+			//Function to stop video. Still has heavy delay..
+			var video = $("#twitchPlayerObject").attr("data");
+			$("#playerid").attr("data","");
+			$("#playerid").attr("data",video);
+		}});
 		
 		//Register the streams
 		$(".streamLink").click(function(){
