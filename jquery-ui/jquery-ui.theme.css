@@ -1,5 +1,5 @@
 /*!
- * jQuery UI CSS Framework 1.11.0
+ * jQuery UI CSS Framework 1.11.1
  * http://jqueryui.com
  *
  * Copyright 2014 jQuery Foundation and other contributors
@@ -8,7 +8,7 @@
  *
  * http://api.jqueryui.com/category/theming/
  *
- * To view and modify this theme, visit http://jqueryui.com/themeroller/?ffDefault=Segoe%20UI%2CArial%2Csans-serif&fwDefault=bold&fsDefault=1.1em&cornerRadius=6px&bgColorHeader=333333&bgTextureHeader=gloss_wave&bgImgOpacityHeader=25&borderColorHeader=333333&fcHeader=ffffff&iconColorHeader=ffffff&bgColorContent=000000&bgTextureContent=inset_soft&bgImgOpacityContent=25&borderColorContent=666666&fcContent=ffffff&iconColorContent=cccccc&bgColorDefault=555555&bgTextureDefault=glass&bgImgOpacityDefault=20&borderColorDefault=666666&fcDefault=eeeeee&iconColorDefault=cccccc&bgColorHover=0078a3&bgTextureHover=glass&bgImgOpacityHover=40&borderColorHover=59b4d4&fcHover=ffffff&iconColorHover=ffffff&bgColorActive=f58400&bgTextureActive=inset_soft&bgImgOpacityActive=30&borderColorActive=ffaf0f&fcActive=ffffff&iconColorActive=222222&bgColorHighlight=eeeeee&bgTextureHighlight=highlight_soft&bgImgOpacityHighlight=80&borderColorHighlight=cccccc&fcHighlight=2e7db2&iconColorHighlight=4b8e0b&bgColorError=ffc73d&bgTextureError=glass&bgImgOpacityError=40&borderColorError=ffb73d&fcError=111111&iconColorError=a83300&bgColorOverlay=5c5c5c&bgTextureOverlay=flat&bgImgOpacityOverlay=50&opacityOverlay=80&bgColorShadow=cccccc&bgTextureShadow=flat&bgImgOpacityShadow=30&opacityShadow=60&thicknessShadow=7px&offsetTopShadow=-7px&offsetLeftShadow=-7px&cornerRadiusShadow=8px
+ * To view and modify this theme, visit http://jqueryui.com/themeroller/?ffDefault=Segoe%20UI%2CArial%2Csans-serif&fwDefault=bold&fsDefault=1.1em&cornerRadius=0&bgColorHeader=%23231f20&bgTextureHeader=flat&bgImgOpacityHeader=25&borderColorHeader=%23201d1e&fcHeader=%23ffffff&iconColorHeader=%23ffffff&bgColorContent=%23000000&bgTextureContent=flat&bgImgOpacityContent=25&borderColorContent=%23666666&fcContent=%23ffffff&iconColorContent=%23cccccc&bgColorDefault=%23555555&bgTextureDefault=flat&bgImgOpacityDefault=20&borderColorDefault=%23666666&fcDefault=%23eeeeee&iconColorDefault=%23cccccc&bgColorHover=%230078a3&bgTextureHover=flat&bgImgOpacityHover=40&borderColorHover=%2359b4d4&fcHover=%23ffffff&iconColorHover=%23ffffff&bgColorActive=%236441a5&bgTextureActive=flat&bgImgOpacityActive=30&borderColorActive=%236947a9&fcActive=%23ffffff&iconColorActive=%23222222&bgColorHighlight=%23eeeeee&bgTextureHighlight=highlight_soft&bgImgOpacityHighlight=80&borderColorHighlight=%23cccccc&fcHighlight=%232e7db2&iconColorHighlight=%234b8e0b&bgColorError=%23ffc73d&bgTextureError=glass&bgImgOpacityError=40&borderColorError=%23ffb73d&fcError=%23111111&iconColorError=%23a83300&bgColorOverlay=%235c5c5c&bgTextureOverlay=flat&bgImgOpacityOverlay=50&opacityOverlay=80&bgColorShadow=%23cccccc&bgTextureShadow=flat&bgImgOpacityShadow=30&opacityShadow=60&thicknessShadow=7px&offsetTopShadow=-7px&offsetLeftShadow=-7px&cornerRadiusShadow=8px
  */
 
 
@@ -30,15 +30,15 @@
 }
 .ui-widget-content {
 	border: 1px solid #666666;
-	background: #000000 url("images/ui-bg_inset-soft_25_000000_1x100.png") 50% bottom repeat-x;
+	background: #000000 url("images/ui-bg_flat_25_000000_40x100.png") 50% 50% repeat-x;
 	color: #ffffff;
 }
 .ui-widget-content a {
 	color: #ffffff;
 }
 .ui-widget-header {
-	border: 1px solid #333333;
-	background: #333333 url("images/ui-bg_gloss-wave_25_333333_500x100.png") 50% 50% repeat-x;
+	border: 1px solid #201d1e;
+	background: #231f20 url("images/ui-bg_flat_25_231f20_40x100.png") 50% 50% repeat-x;
 	color: #ffffff;
 	font-weight: bold;
 }
@@ -52,7 +52,7 @@
 .ui-widget-content .ui-state-default,
 .ui-widget-header .ui-state-default {
 	border: 1px solid #666666;
-	background: #555555 url("images/ui-bg_glass_20_555555_1x400.png") 50% 50% repeat-x;
+	background: #555555 url("images/ui-bg_flat_20_555555_40x100.png") 50% 50% repeat-x;
 	font-weight: bold;
 	color: #eeeeee;
 }
@@ -69,7 +69,7 @@
 .ui-widget-content .ui-state-focus,
 .ui-widget-header .ui-state-focus {
 	border: 1px solid #59b4d4;
-	background: #0078a3 url("images/ui-bg_glass_40_0078a3_1x400.png") 50% 50% repeat-x;
+	background: #0078a3 url("images/ui-bg_flat_40_0078a3_40x100.png") 50% 50% repeat-x;
 	font-weight: bold;
 	color: #ffffff;
 }
@@ -87,8 +87,8 @@
 .ui-state-active,
 .ui-widget-content .ui-state-active,
 .ui-widget-header .ui-state-active {
-	border: 1px solid #ffaf0f;
-	background: #f58400 url("images/ui-bg_inset-soft_30_f58400_1x100.png") 50% 50% repeat-x;
+	border: 1px solid #6947a9;
+	background: #6441a5 url("images/ui-bg_flat_30_6441a5_40x100.png") 50% 50% repeat-x;
 	font-weight: bold;
 	color: #ffffff;
 }
@@ -139,18 +139,18 @@
 .ui-widget-content .ui-priority-secondary,
 .ui-widget-header .ui-priority-secondary {
 	opacity: .7;
-	filter:Alpha(Opacity=70);
+	filter:Alpha(Opacity=70); /* support: IE8 */
 	font-weight: normal;
 }
 .ui-state-disabled,
 .ui-widget-content .ui-state-disabled,
 .ui-widget-header .ui-state-disabled {
 	opacity: .35;
-	filter:Alpha(Opacity=35);
+	filter:Alpha(Opacity=35); /* support: IE8 */
 	background-image: none;
 }
 .ui-state-disabled .ui-icon {
-	filter:Alpha(Opacity=35); /* For IE8 - See #6059 */
+	filter:Alpha(Opacity=35); /* support: IE8 - See #6059 */
 }
 
 /* Icons
@@ -373,38 +373,38 @@
 .ui-corner-top,
 .ui-corner-left,
 .ui-corner-tl {
-	border-top-left-radius: 6px;
+	border-top-left-radius: 0;
 }
 .ui-corner-all,
 .ui-corner-top,
 .ui-corner-right,
 .ui-corner-tr {
-	border-top-right-radius: 6px;
+	border-top-right-radius: 0;
 }
 .ui-corner-all,
 .ui-corner-bottom,
 .ui-corner-left,
 .ui-corner-bl {
-	border-bottom-left-radius: 6px;
+	border-bottom-left-radius: 0;
 }
 .ui-corner-all,
 .ui-corner-bottom,
 .ui-corner-right,
 .ui-corner-br {
-	border-bottom-right-radius: 6px;
+	border-bottom-right-radius: 0;
 }
 
 /* Overlays */
 .ui-widget-overlay {
 	background: #5c5c5c url("images/ui-bg_flat_50_5c5c5c_40x100.png") 50% 50% repeat-x;
 	opacity: .8;
-	filter: Alpha(Opacity=80);
+	filter: Alpha(Opacity=80); /* support: IE8 */
 }
 .ui-widget-shadow {
 	margin: -7px 0 0 -7px;
 	padding: 7px;
 	background: #cccccc url("images/ui-bg_flat_30_cccccc_40x100.png") 50% 50% repeat-x;
 	opacity: .6;
-	filter: Alpha(Opacity=60);
+	filter: Alpha(Opacity=60); /* support: IE8 */
 	border-radius: 8px;
 }

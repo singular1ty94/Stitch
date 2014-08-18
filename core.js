@@ -234,9 +234,10 @@ var makeStreamLink = function(stream){
 */
 var makeHeader = function(item){
 	var sanitizedtitle = item.title.replace("Review", "");
+	var date = new Date(item.date);	//it's stored as an ISO string in the rss feed.
 	
 	return "<h3 class=\"rss-header\" data-sanitized-title=\"" + sanitizedtitle + "\">" + sanitizedtitle + 
-	"<span>" + item.author + "</span></h3>";
+	"<span>" + item.author + " - " + date.toLocaleDateString() + "</span></h3>";
 }
 
 /**
