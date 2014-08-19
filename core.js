@@ -8,6 +8,7 @@
 *			parent.
 */
 var processing = false;
+var TITLES = null;
 
 var core = function(){
 
@@ -17,6 +18,13 @@ var core = function(){
 		value: false
 	});
 	
+	
+	/**
+	* Grab the Titles list first.
+	*/
+	$.get("/?titles", function(data){
+		TITLES = JSON.parse(data);
+	});
 	
 	/**
     * This function AJAX's down to the server and informs it that
@@ -110,13 +118,15 @@ var searchSteamStorefront = function(url, caller, newTitle){
 			
 			}else{
 				//Hey, not the first time we've called this.
+				//Now create an extra file.
+				$.get("/?correct&old=" + caller.data("sanitized-title") + "&new=" + newTitle.join(" "), function(data){});
 				//It's been succesful, so we rename our caller.
 				caller.data("sanitized-title", newTitle.join(" "));
 			}
 			//Assumes steamDB got the guess right.
 			getPricesAndScore(allIds[0], caller.data("sanitized-title"));
 		}else{
-			//Failed.
+			//Failed. Ask the user to manually find.
 			processing = false;
 			failedPricesAndScore(caller);
 		}
@@ -208,9 +218,11 @@ var flyingDutchman = function(game){
 		var content = "";
 		//Loop through the data
 		if(kraken.streams.length > 0){
+			content += "<ul id=\"twitchGallery\">";
 			for(var i = 0; i < Math.min(kraken.streams.length, config.MAX_STREAM_PREVIEW); i++){
 				content += makeStreamLink(kraken.streams[i]);
 			}
+			content += "</ul>";
 		}else{
 			content += "<br /><br />Nobody's streaming right now.<br />Try again later!";
 		}
@@ -218,6 +230,14 @@ var flyingDutchman = function(game){
 		//End the progress bar
 		$("#progressbar").hide();
 		
+		//Attach slider
+		$('#twitchGallery').lightSlider({
+			minSlide:1,
+			maxSlide:1,
+			slideWidth:320,
+			slideHeight:200,
+			keyPress: false
+    	});
 		//Attach the colorbox.
 		$(".streamLink").colorbox({inline:true, innerWidth:670, innerHeight:410, onClosed: function(){
 			//Function to stop video. Still has heavy delay..
@@ -287,7 +307,7 @@ var makeURL = function(item){
 * a traditional <img> element.
 */
 var makeStreamLink = function(stream){
-	return "<a class=\"streamLink\" id=\"" + stream._id + "\"href=\"#twitchPlayer\" data-channel=\"" + stream.channel.name + "\"><img class=\"twitch-preview\" src=\"" + stream.preview.medium + "\"/></a><br />"; 
+	return "<li><a class=\"streamLink\" id=\"" + stream._id + "\"href=\"#twitchPlayer\" data-channel=\"" + stream.channel.name + "\"><img class=\"twitch-preview\" src=\"" + stream.preview.medium + "\"/></a></li>"; 
 }
 
 
@@ -298,6 +318,14 @@ var makeStreamLink = function(stream){
 */
 var makeHeader = function(item){
 	var sanitizedtitle = item.title.replace("Review", "");
+	
+	//Lets check if this title is correct, or if a better name is known.
+	for(var i = 0; i < TITLES.length; i++){
+    	if(TITLES[i].old == sanitizedtitle){
+    		sanitizedtitle = TITLES[i].newTitle;
+    	}
+	}
+	
 	var date = new Date(item.date);	//it's stored as an ISO string in the rss feed.
 	
 	return "<h3 class=\"rss-header\" data-sanitized-title=\"" + sanitizedtitle + "\">" + sanitizedtitle + 

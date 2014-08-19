@@ -69,6 +69,8 @@ header{
 	color:white;
 	font-family: sans-serif;
 	text-align:center;
+	position:fixed;
+	right:0;
 }
 
 //Standard Links across the entire website.
@@ -127,6 +129,7 @@ a{
 	@extend .box;
 	font-size:16pt !important;
 }
+
 
 .twitch-preview{
 	display:inline-block;

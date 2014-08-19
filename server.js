@@ -18,7 +18,11 @@ var CMD_WAKE = "wake";
 var CMD_SEARCH = "search";
 var CMD_STEAM = "steam";
 var CMD_KRAKEN = "kraken";
+var CMD_CORRECT = "correct";
+var CMD_TITLES = "titles";
 var RSS_FEED = "http://feeds.ign.com/ign/pc-reviews/";
+
+var TITLES = null;
 
 //The . is important here.
 var MIME_TYPES = {
@@ -31,9 +35,10 @@ var MIME_TYPES = {
     ".png" : "image/png"
 }
 
-//Load the config file.
+//Load the config file and title file.
 try{
-	eval(fs.readFileSync('config.js', encoding="ascii"));
+	eval(fs.readFileSync('etc/config.js', encoding="ascii"));
+	TITLES = JSON.parse(fs.readFileSync('etc/titles.js', encoding="ascii"));
 }catch(err){
 	console.log("[FATAL] Configuration error: " + err);
 }
@@ -78,7 +83,7 @@ Server.process = function(req, res) {
 */
 Server._processQueries = function(querystring, res){
 	queryArray = qs.parse(querystring);
-	
+	console.log(queryArray);
 	//Loop through the commands.
 	for(var cmd in queryArray){
 		switch(cmd){
@@ -94,6 +99,15 @@ Server._processQueries = function(querystring, res){
 			case CMD_KRAKEN:
 				//Wake...the KRAKEN!
 				Server._flyingDutchman(queryArray[cmd], res);
+				break;
+			case CMD_CORRECT:
+				//Correct an incorrect title
+				Server._correctTitle(queryArray["old"], queryArray["new"], res);
+				break;
+			case CMD_TITLES:
+				//get the titles
+				Server._getTitles(res);
+				break;
 			default:
 				break;
 		}
@@ -255,6 +269,37 @@ Server._flyingDutchman = function(game, response){
 	};
 
 };
+
+/**
+* This function takes the incorrect title
+* of a game, corrects it and stores it in a file.
+*/
+Server._correctTitle = function(oldTitle, correct, response){
+	
+	TITLES[TITLES.length] = {
+		old: oldTitle, newTitle: correct
+	};
+	
+	//Write a file.
+	fs.writeFile("etc/titles.js", JSON.stringify(TITLES), function(err) {
+    if(err) {
+        console.log(err);
+    } else {
+        console.log("The file was adjusted.");
+    }
+	}); 
+
+};
+
+/**
+* Returns the TITLES JSON object.
+*/
+Server._getTitles = function(response){
+	response.write(JSON.stringify(TITLES));
+	response.end();
+};
+
+
 
 var Server$ = {
 
