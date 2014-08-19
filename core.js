@@ -22,7 +22,10 @@ var core = function(){
     * This function AJAX's down to the server and informs it that
     * we are ready to begin displaying content.
     */
-	$.get("/?wake", function(data){
+    $.ajax({
+		url: "/?wake",
+		timeout: config.TIMEOUT	//Max wait time
+	}).done(function(data){
 		//The data here will be JSON format.	
 		var rssData = JSON.parse(data);	
 		var content = "";
@@ -66,6 +69,15 @@ var core = function(){
 				searchSteamStorefront(url, $(this));
 			}
 		});
+	}).error(function(jqXHR, textStatus, errorThrown){
+		//On Timeout.
+		//End the progress bar
+		$("#progressbar").hide();
+		processing = false;
+		
+		//Report the error
+		var error = "<p>Oops! Something's gone terribly wrong.<br />" + errorThrown + "</p>";
+		$("#contentArea").html(error);
 	});
 }
 
@@ -79,8 +91,10 @@ var searchSteamStorefront = function(url, caller, newTitle){
 	$("#progressbar").show();
 	$("#progressbar").progressbar("option", "value", false);
 
-
-	$.get(url, function(data){
+	$.ajax({
+		url: url,
+		timeout: config.TIMEOUT	//Max wait time
+	}).done(function(data){
 		//The data here will be JSON format.	
 		var appData = JSON.parse(data);	
 		var allIds = new Array();
@@ -106,6 +120,15 @@ var searchSteamStorefront = function(url, caller, newTitle){
 			processing = false;
 			failedPricesAndScore(caller);
 		}
+	}).error(function(jqXHR, textStatus, errorThrown){
+		//On Timeout.
+		//End the progress bar
+		$("#progressbar").hide();
+		processing = false;
+		
+		//Report the error
+		var error = "<p>Oops! Something's gone terribly wrong.<br />" + errorThrown + "</p>";
+		$("#twitchArea").html(error);
 	});
 }
 
@@ -116,7 +139,11 @@ var searchSteamStorefront = function(url, caller, newTitle){
 var getPricesAndScore = function(bestGuess, name){
 	//Remove the content from the div
 	$("#twitchArea").html("");
-	$.get("/?steam=" + bestGuess, function(data){
+	
+	$.ajax({
+		url: "/?steam=" + bestGuess,
+		timeout: config.TIMEOUT	//Max wait time
+	}).done(function(data){
 		//Our retreived data
 		var steamData = JSON.parse(data);
 		var content = "";
@@ -151,6 +178,15 @@ var getPricesAndScore = function(bestGuess, name){
 		//Try getting twitch videos next
 		flyingDutchman(name);
 		
+	}).error(function(jqXHR, textStatus, errorThrown){
+		//On Timeout.
+		//End the progress bar
+		$("#progressbar").hide();
+		processing = false;
+		
+		//Report the error
+		var error = "<p>Oops! Something's gone terribly wrong.<br />" + errorThrown + "</p>";
+		$("#twitchArea").html(error);
 	});
 }
 
@@ -161,7 +197,11 @@ var getPricesAndScore = function(bestGuess, name){
 var flyingDutchman = function(game){
 	//Wake...the KRAKEN
 	$("#progressbar").show();
-	$.get("/?kraken=" + game, function(data){
+	
+	$.ajax({
+		url: "/?kraken=" + game,
+		timeout: config.TIMEOUT	//Max wait time
+	}).done(function(data){
 		//Our retreived data
 		var kraken = JSON.parse(data);
 		
@@ -193,6 +233,15 @@ var flyingDutchman = function(game){
 		});
 		
 		processing = false;	//end the lock
+	}).error(function(jqXHR, textStatus, errorThrown){
+		//On Timeout.
+		//End the progress bar
+		$("#progressbar").hide();
+		processing = false;
+		
+		//Report the error
+		var error = "<p>Oops! Something's gone terribly wrong.<br />" + errorThrown + "</p>";
+		$("#twitchArea").html(error);
 	});
 }
 

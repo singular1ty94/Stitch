@@ -12,6 +12,11 @@ config = {
 	//Default: 8888
 	PORT:8888,
 	
+	//TIMEOUT - How long to wait on a request before considering it
+	//			an error. (measured in ms)
+	//Default: 3000
+	TIMEOUT: 3000,	
+	
 	//MAX_STREAM_PREVIEW - the number of previews loaded from
 	//						from Twitch.
 	//Default: 3
