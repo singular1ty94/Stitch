@@ -74,14 +74,17 @@ header{
 //Standard Links across the entire website.
 a{
 	&:link{
-		color:white;
+		color:$accentBlue !important;
 		text-decoration:none;
 	}
 	
-	&:visited{}
+	&:visited{
+		color:$twitchPurple !important;
+		text-decoration:none;
+	}
 	
 	&:hover{
-		color: $linkHover;
+		color: $twitchPurple !important;
 	}
 	
 	&:active{}

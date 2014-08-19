@@ -7,6 +7,7 @@
 *			Each AJAX call relies on the success of the 
 *			parent.
 */
+var processing = false;
 
 var core = function(){
 
@@ -15,6 +16,7 @@ var core = function(){
 	$("#progressbar").progressbar({
 		value: false
 	});
+	
 	
 	/**
     * This function AJAX's down to the server and informs it that
@@ -30,8 +32,7 @@ var core = function(){
 		//Loop through the data.
 		for(var i = 0; i < Math.min(rssData.length / 2, config.MAX_RSS_ITEMS); i++){
 			content += makeHeader(rssData[i]);
-			//content += makeURL(rssData[i]) + "<br />";	//Making an anchor out of the article.
-			content += makeSummary(rssData[i]);	//Make the (hidden) summary div.		
+			content += makeArticle(rssData[i]);		
 		}
 		
 		//End the progress bar
@@ -44,14 +45,26 @@ var core = function(){
 		$("#contentArea").accordion({
 			heightStyle: "content",
 			collapsible: true,
-		 	active: false
+		 	active: false,
+		 	beforeActivate: function(event, ui) {
+		 		if(processing){
+		 			event.preventDefault();
+		 			event.stopImmediatePropagation();
+		 		}
+		 	}
 		});
 		
+		//Make sure all hyperlinks are injected with a new window target.
+		$(".ui-accordion-content a").attr("target", "_blank");
+		
 		//Now go search steam for this particular game.
-		$(".rss-header").click(function(){
-			var arr = $(this).data("sanitized-title").split(" ");
-			var url = "/?search=" + arr.join("+");
-			searchSteamStorefront(url, $(this));
+		$(".rss-header").click(function(event){
+			if(!processing){
+				processing = true;
+				var arr = $(this).data("sanitized-title").split(" ");
+				var url = "/?search=" + arr.join("+");
+				searchSteamStorefront(url, $(this));
+			}
 		});
 	});
 }
@@ -90,6 +103,7 @@ var searchSteamStorefront = function(url, caller, newTitle){
 			getPricesAndScore(allIds[0], caller.data("sanitized-title"));
 		}else{
 			//Failed.
+			processing = false;
 			failedPricesAndScore(caller);
 		}
 	});
@@ -178,6 +192,7 @@ var flyingDutchman = function(game){
 			$("#twitchMovie").attr("value", "hostname=www.twitch.tv&channel=" +  $(this).data("channel") + "&auto_play=true&start_volume=25");
 		});
 		
+		processing = false;	//end the lock
 	});
 }
 
@@ -245,19 +260,17 @@ var makeHeader = function(item){
 * formatted by FeedParser and returns
 * a <div><p> element, used by Accordion.
 */
+var makeArticle = function(item){
+	return "<div><p>" + item.description + "</p></div>";
+}
+
+/**
+* Helper method that takes an item
+* formatted by FeedParser and returns
+* a <div><p> element, used by Accordion.
+*/
 var makeSummary = function(item){
 	return "<div><p>" + item.summary + "</p></div>";
 }
 
-/**
-* Helper function for progress bar.
-*/
-var adjustProgress = function(delta){
-	var d = $("#progressbar").progressbar("option", "value");
-
-	$("#progressbar").progressbar( 
-	"option", {
-		value: d + delta
-	});
-}
 
