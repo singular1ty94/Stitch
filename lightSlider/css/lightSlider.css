@@ -2,7 +2,14 @@
 
 .csSlideOuter {
 	overflow: hidden;
+	width:320px;
+	margin:0 auto;
 }
+
+.lightSlider{
+	padding:0px;
+}
+
 .lightSlider:before, .lightSlider:after {
 	content: " ";
 	display: table;
@@ -30,7 +37,7 @@
 	left: 0;
 	z-index: 9;
 	margin-right: 0;
-	width: 320px;
+	width: 100%;
 }
 .csSlideWrapper.usingCss .csFade > * {
 	opacity: 0;
@@ -63,7 +70,7 @@
 	padding: 0 5px;
 }
 .csSlideOuter .csPager.cSpg > li a {
-	background-color: #222222;
+	background-color: #231f20;
 	border-radius: 30px;
 	display: inline-block;
 	height: 8px;
@@ -76,7 +83,7 @@
 	transition: all 0.5s linear 0s;
 }
 .csSlideOuter .csPager.cSpg > li:hover a, .csSlideOuter .csPager.cSpg > li.active a {
-	background-color: #428bca;
+	background-color: #0078a3;
 }
 .csSlideOuter .media {
 	opacity: 0.8;
@@ -109,7 +116,7 @@
 .csSlideOuter .csPager.cSGallery img {
 	display: block;
 	height: auto;
-	max-width: 320px;
+	max-width: 100%;
 }
 .csSlideOuter .csPager.cSGallery:before, .csSlideOuter .csPager.cSGallery:after {
 	content: " ";

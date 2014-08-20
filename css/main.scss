@@ -65,13 +65,12 @@ header{
 //This area is just used for the twitch video
 #twitchArea{
 	width:500px;
-	float:right;
 	color:white;
 	font-family: sans-serif;
 	text-align:center;
 	position:fixed;
-	right:0;
-}
+	right:0}
+
 
 //Standard Links across the entire website.
 a{
@@ -106,10 +105,10 @@ a{
 	background: $twitchGray;
 	text-align:center;
 	vertical-align:middle;
-	font-size:22pt;
+	font-size:18pt;
 	font-family: sans-serif;
 	color:white;
-	width:175px;
+	width:116px;
 }
 
 .header_image{
@@ -131,16 +130,34 @@ a{
 }
 
 
-.twitch-preview{
-	display:inline-block;
-	margin:10px;	
-}
-
-
 #twitchPlayer{
 	background:black;
 	text-align:center;
 	padding-top:20px;
+}
+
+a.launchSteam{
+	&:link{
+		display:block;
+		width:95px;
+		height:17px;
+		font-size:18px;
+		text-align:center;
+		padding: 6px 10px 6px 10px;
+		color:white !important;
+		background:$twitchPurple;
+		text-decoration:none;
+	}
+	
+	&:visited{
+		text-decoration:none;
+	}
+	
+	&:hover{
+		background: $accentBlue !important;
+	}
+	
+	&:active{}
 }
 
 

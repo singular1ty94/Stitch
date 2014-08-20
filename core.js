@@ -84,8 +84,8 @@ var core = function(){
 		processing = false;
 		
 		//Report the error
-		var error = "<p>Oops! Something's gone terribly wrong.<br />" + errorThrown + "</p>";
-		$("#contentArea").html(error);
+		var error = "<br /><p>The server took too long to respond.</p>";
+		$("#twitchArea").html($("#twitchArea").html() + error);
 	});
 }
 
@@ -137,8 +137,8 @@ var searchSteamStorefront = function(url, caller, newTitle){
 		processing = false;
 		
 		//Report the error
-		var error = "<p>Oops! Something's gone terribly wrong.<br />" + errorThrown + "</p>";
-		$("#twitchArea").html(error);
+		var error = "<br /><p>The server took too long to respond.</p>";
+		$("#twitchArea").html($("#twitchArea").html() + error);
 	});
 }
 
@@ -158,11 +158,11 @@ var getPricesAndScore = function(bestGuess, name){
 		var steamData = JSON.parse(data);
 		var content = "";
 
-		var img = "<img class=\"header_image\" src=\"" + String(steamData[bestGuess].data.header_image) + "\"/>";
+		var img = "<img class=\"header_image\" src=\"" + String(steamData[bestGuess].data.header_image) + "\"/><br />";
 		content += img;
 		
-		var header = "<span class=\"cost-header\">Cost</span><span class=\"cost-header\">Metacritic</span><br />";
-		content += header;
+		//var header = "<span class=\"cost-header\">Cost</span><span class=\"cost-header\">Metacritic</span><br />";
+		//content += header;
 				
 		try{
 			var cost = String(steamData[bestGuess].data.price_overview.final);
@@ -171,7 +171,7 @@ var getPricesAndScore = function(bestGuess, name){
 			var final = "<span class=\"cost\">$" + dollars + "." + cents + "</span>";
 			content += final;
 		}catch(err){
-			content += "<span class=\"cost\" title=\"Something went wrong with the price.\">?</span>"
+			content += "<span class=\"cost\" title=\"This game is free to play.\">Free</span>"
 		}
 		
 		try{
@@ -181,6 +181,9 @@ var getPricesAndScore = function(bestGuess, name){
 		}catch(err){
 			content += "<span class=\"metacritic\" title=\"This game doesn't have a Metacritic score.\">?</span>"
 		}
+		
+		//Now show the Play with Steam button.
+		content += "<span class=\"cost\"><a class=\"launchSteam\" target=\"_blank\" href=\"steam://run/" + bestGuess + "\">Launch</a></span>";
 
 		//Add the content to the div
 		$("#twitchArea").html(content);
@@ -195,8 +198,8 @@ var getPricesAndScore = function(bestGuess, name){
 		processing = false;
 		
 		//Report the error
-		var error = "<p>Oops! Something's gone terribly wrong.<br />" + errorThrown + "</p>";
-		$("#twitchArea").html(error);
+		var error = "<br /><p>The server took too long to respond.</p>";
+		$("#twitchArea").html($("#twitchArea").html() + error);
 	});
 }
 
@@ -232,11 +235,9 @@ var flyingDutchman = function(game){
 		
 		//Attach slider
 		$('#twitchGallery').lightSlider({
-			minSlide:1,
-			maxSlide:1,
-			slideWidth:320,
-			slideHeight:200,
-			keyPress: false
+		 	 minSlide:1,
+			 maxSlide:1,
+			 slideWidth:320
     	});
 		//Attach the colorbox.
 		$(".streamLink").colorbox({inline:true, innerWidth:670, innerHeight:410, onClosed: function(){
@@ -260,8 +261,8 @@ var flyingDutchman = function(game){
 		processing = false;
 		
 		//Report the error
-		var error = "<p>Oops! Something's gone terribly wrong.<br />" + errorThrown + "</p>";
-		$("#twitchArea").html(error);
+		var error = "<br /><p>The server took too long to respond.</p>";
+		$("#twitchArea").html($("#twitchArea").html() + error);
 	});
 }
 
@@ -307,7 +308,7 @@ var makeURL = function(item){
 * a traditional <img> element.
 */
 var makeStreamLink = function(stream){
-	return "<li><a class=\"streamLink\" id=\"" + stream._id + "\"href=\"#twitchPlayer\" data-channel=\"" + stream.channel.name + "\"><img class=\"twitch-preview\" src=\"" + stream.preview.medium + "\"/></a></li>"; 
+	return "<li><a class=\"streamLink\" id=\"" + stream._id + "\"href=\"#twitchPlayer\" data-channel=\"" + stream.channel.name + "\"><img src=\"" + stream.preview.medium + "\"/></a></li>"; 
 }
 
 
