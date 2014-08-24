@@ -1,4 +1,4 @@
-/**
+/***
 * Stitch - Steam with Twitch
 * File: server.js
 * Purpose: The main node.js server file to instantiate and operate a server.
@@ -43,8 +43,13 @@ try{
 	console.log("[FATAL] Configuration error: " + err);
 }
 
-/*
-* Blank constructor. Uses prototyping to add additional features.
+/**
+* Constructs the Server object.
+* The server manages the Cross-Domain calls to
+* retreive response objects, and passes JSON objects
+* back to the client (see {@linkcode Core.Core}).
+* Responds to requests from the Client.
+* @constructor
 */
 function Server() { 
 }
@@ -52,6 +57,9 @@ function Server() {
 /**
 * This method takes the incoming request, parses the URL
 * and displays it. Used to display the client side pages.
+* Extracts querystrings and sends them to {@linkcode Server.processQueries}
+* @param req - Standard request object.
+* @param res - Standard response object.
 */
 Server.process = function(req, res) {
 
@@ -66,7 +74,7 @@ Server.process = function(req, res) {
 		//Adjust the baseURL.
 		baseUrl = baseUrl.slice(0, baseUrl.indexOf("?"));
 		//Process our queries.
-		Server._processQueries(query, res);
+		Server.processQueries(query, res);
 	}else{
 		//Get the file and identifies what MIME_TYPE it is to display it.
 		fs.readFile(__dirname + baseUrl, function (err, data) {
@@ -80,33 +88,36 @@ Server.process = function(req, res) {
 
 /**
 * Process any queries we had, such as the WAKE command.
+* Calls relevent functions to handle these queries,
+* and passes the response object down.
+* @param querystring - The querystring.
+* @param res - Standard response object.
 */
-Server._processQueries = function(querystring, res){
+Server.processQueries = function(querystring, res){
 	queryArray = qs.parse(querystring);
-	console.log(queryArray);
-	//Loop through the commands.
+	//Iterate through the commands.
 	for(var cmd in queryArray){
 		switch(cmd){
 			case CMD_WAKE:
-				Server._parseRSS(res);
+				Server.parseRSS(res);
 				break;
 			case CMD_SEARCH:
-				Server._steamDB(queryArray[cmd], res);
+				Server.steamDB(queryArray[cmd], res);
 				break;
 			case CMD_STEAM:
-				Server._storefront(queryArray[cmd], res);
+				Server.storefront(queryArray[cmd], res);
 				break;
 			case CMD_KRAKEN:
 				//Wake...the KRAKEN!
-				Server._flyingDutchman(queryArray[cmd], res);
+				Server.flyingDutchman(queryArray[cmd], res);
 				break;
 			case CMD_CORRECT:
 				//Correct an incorrect title
-				Server._correctTitle(queryArray["old"], queryArray["new"], res);
+				Server.correctTitle(queryArray["old"], queryArray["new"], res);
 				break;
 			case CMD_TITLES:
 				//get the titles
-				Server._getTitles(res);
+				Server.getTitles(res);
 				break;
 			default:
 				break;
@@ -116,8 +127,11 @@ Server._processQueries = function(querystring, res){
 
 /**
 * Parses the IGN RSS Feed.
+* Uses the FeedParser module.
+* Responds with a stringified JSON object.
+* @param response - Standard response object.
 */
-Server._parseRSS = function(response){
+Server.parseRSS = function(response){
 	var req = request(RSS_FEED), feedparser = new FeedParser();
 
 	//Grab any errors.
@@ -162,8 +176,10 @@ Server._parseRSS = function(response){
 * to find the AppID of the provided game. This isn't
 * an exact science, but without the AppID, we can't access
 * steam storefront to get the price and metacritic score.
+* @param game - The game's name, in the format of game+name
+* @param response - Standard response object.
 */
-Server._steamDB = function(game, response){
+Server.steamDB = function(game, response){
 	//The steamdb url to go to.
 	var theUrl = 'http://www.steamdb.info/search/?a=app&q=' + game + '&type=1&category=0';
 
@@ -196,9 +212,7 @@ Server._steamDB = function(game, response){
 		  }
 	});
 	
-	/**
-	* Called once Cheerio has dealt with the stream.
-	*/
+	//Called once Cheerio has dealt with the stream.
 	var done = function(){
 		response.write(JSON.stringify(appIDarr));
 		response.end();
@@ -209,8 +223,10 @@ Server._steamDB = function(game, response){
 /**
 * This function accesses Steam Storefront
 * via the BigPicture api. It requires an AppID.
+* @param appID - The AppID to search for.
+* @param response - Standard response object.
 */
-Server._storefront = function(appID, response){
+Server.storefront = function(appID, response){
 	//The steam url to go to.
 	var storefront = "http://store.steampowered.com/api/appdetails?appids=" + appID +"&filters=price_overview,metacritic,basic";
 
@@ -241,8 +257,10 @@ Server._storefront = function(appID, response){
 * This function accesses Twitch to retreive
 * a list of streams relevant to the game
 * name provided.
+* @param game - The game name to search for.
+* @param response - Standard response object.
 */
-Server._flyingDutchman = function(game, response){
+Server.flyingDutchman = function(game, response){
 	//The method's name is a reference to Pirates of the Caribbean, go watch the trilogy if you haven't seen it!
 	//The steamdb url to go to.
 	var kraken = 'https://api.twitch.tv/kraken/search/streams?query=' + game + '&type=suggest';
@@ -273,14 +291,18 @@ Server._flyingDutchman = function(game, response){
 /**
 * This function takes the incorrect title
 * of a game, corrects it and stores it in a file.
+* @param oldTitle - The incorrect title of the game.
+* @param correct - The new title of the game.
+* @param response - Standard response object.
 */
-Server._correctTitle = function(oldTitle, correct, response){
+Server.correctTitle = function(oldTitle, correct, response){
 	
+	//Add to our cached array.
 	TITLES[TITLES.length] = {
 		old: oldTitle, newTitle: correct
 	};
 	
-	//Write a file.
+	//Write the array to file.
 	fs.writeFile("etc/titles.js", JSON.stringify(TITLES), function(err) {
     if(err) {
         console.log(err);
@@ -293,16 +315,11 @@ Server._correctTitle = function(oldTitle, correct, response){
 
 /**
 * Returns the TITLES JSON object.
+* @param response - Standard response object.
 */
-Server._getTitles = function(response){
+Server.getTitles = function(response){
 	response.write(JSON.stringify(TITLES));
 	response.end();
-};
-
-
-
-var Server$ = {
-
 };
 
 (function() {
