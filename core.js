@@ -78,7 +78,7 @@ Core.getRSSArticles = function(){
 		 		}
 		 	}
 		});
-		
+	
 		//Make sure all hyperlinks are injected with a new window target.
 		$(".ui-accordion-content a").attr("target", "_blank");
 		
