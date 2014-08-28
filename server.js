@@ -52,6 +52,16 @@ try{
 * @constructor
 */
 function Server() { 
+	var host = '127.0.0.1';   //localhost.
+  	var port = config.PORT;			//from the config
+  	try {
+    	http.createServer(Server.process).listen(port, host);
+    	console.log('Server running and live on http://' + host + ':' + port);
+    	return true;
+  	}  catch (e) {
+    	console.error('Error while creating server:\n\n' + e.stack);
+    	return false;
+  	}
 }
 
 /**
@@ -76,13 +86,23 @@ Server.process = function(req, res) {
 		//Process our queries.
 		Server.processQueries(query, res);
 	}else{
-		//Get the file and identifies what MIME_TYPE it is to display it.
-		fs.readFile(__dirname + baseUrl, function (err, data) {
-			if(err){ console.log(err); }
-			res.writeHead(200, {'Content-Type': MIME_TYPES[baseUrl.split(".")[1]]});
-			res.write(data);
-			res.end();
-	  	});
+		if(baseUrl == "/"){
+			fs.readFile(__dirname + '/index.html', function (err, data) {
+				if(err){ console.log(err); }
+				res.writeHead(200, {'Content-Type': 'text/html'});
+				res.write(data);
+				res.end();
+		  	});
+		}else{
+			//Get the file and identifies what MIME_TYPE it is to display it.
+			fs.readFile(__dirname + baseUrl, function (err, data) {
+				if(err){ console.log(err); }
+				res.writeHead(200, {'Content-Type': MIME_TYPES[baseUrl.split(".")[1]]});
+				res.write(data);
+				res.end();
+		  	});
+	  	}
+	  	
 	}
 };
 
@@ -322,14 +342,11 @@ Server.getTitles = function(response){
 	response.end();
 };
 
-(function() {
-  var host = '127.0.0.1';   //localhost.
-  var port = config.PORT;			//from the config
-  try {
-    http.createServer(Server.process).listen(port, host);
-    console.log('Server running and live on http://' + host + ':' + port);
-  }  catch (e) {
-    console.error('Error while creating server:\n\n' + e.stack);
-  }
-})();
+
+//ONLY call the constructor if this was called
+//from Node itself (ie, this wasn't a required module).
+if(module.parent == null){
+	//Call the server.
+	new Server();
+}
 
