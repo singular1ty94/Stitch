@@ -24,15 +24,16 @@ var RSS_FEED = "http://feeds.ign.com/ign/pc-reviews/";
 
 var TITLES = null;
 
-//The . is important here.
 var MIME_TYPES = {
-	".json":"application/json",
-	".rss": "application/rss+xml",
-    ".html":"text/html",
-    ".css":"text/css",
-    ".js" : "text/js",
-    ".ico" : "image/x-icon",
-    ".png" : "image/png"
+	"json":"application/json",
+	"rss": "application/rss+xml",
+    "html":"text/html",
+    "css":"text/css",
+    "min.css": "text/css",
+    "min.js": "text/javascript",
+    "js" : "text/javascript",
+    "ico" : "image/x-icon",
+    "png" : "image/png"
 }
 
 //Load the config file and title file.
@@ -97,7 +98,8 @@ Server.process = function(req, res) {
 			//Get the file and identifies what MIME_TYPE it is to display it.
 			fs.readFile(__dirname + baseUrl, function (err, data) {
 				if(err){ console.log(err); }
-				res.writeHead(200, {'Content-Type': MIME_TYPES[baseUrl.split(".")[1]]});
+				baseArray = baseUrl.split(".");
+				res.writeHead(200, {'Content-Type': MIME_TYPES[baseArray[baseArray.length-1]]});
 				res.write(data);
 				res.end();
 		  	});
