@@ -8,7 +8,8 @@
     "cheerio": "^0.17.0",
     "jsdoc": "^3.3.0-alpha9",
     "request": "^2.40.0",
-    "ink-docstrap": "^0.4.12"
+    "ink-docstrap": "^0.4.12",
+	"mime" : "^1.2.11"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",

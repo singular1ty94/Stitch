@@ -12,7 +12,8 @@ var http = require('http'),
     qs = require('querystring'),
     request = require('request'),
     FeedParser = require('feedparser'),
-    cheerio = require('cheerio');
+    cheerio = require('cheerio'),
+	mime = require('mime');
 
 var CMD_WAKE = "wake";
 var CMD_SEARCH = "search";
@@ -23,18 +24,7 @@ var CMD_TITLES = "titles";
 var RSS_FEED = "http://feeds.ign.com/ign/pc-reviews/";
 
 var TITLES = null;
-
-var MIME_TYPES = {
-	"json":"application/json",
-	"rss": "application/rss+xml",
-    "html":"text/html",
-    "css":"text/css",
-    "min.css": "text/css",
-    "min.js": "text/javascript",
-    "js" : "text/javascript",
-    "ico" : "image/x-icon",
-    "png" : "image/png"
-}
+var titlesLoad = false;
 
 //Load the config file and title file.
 try{
@@ -71,27 +61,33 @@ function Server() {
 */
 Server.process = function(req, res) {
 
-	//Fetch the file from Heroku
-	var local = "etc/titles.js";
-	var remote = "http://stitch-steam-with-twitch.herokuapp.com/etc/titles.js";
-	var file = fs.createWriteStream(local);
+	//if(!titlesLoad){
+		//Fetch the file from Heroku
+		var local = "etc/titles.js";
+		var remote = "http://stitch-steam-with-twitch.herokuapp.com/etc/titles.js";
+		var file = fs.createWriteStream(local);
 
-	//request the file from a remote server
-	var rem = request(remote);
-	rem.on('data', function(chunk) {
-		file.write(chunk);
-	});
-	
-	rem.on('end', function(){
-	
-	});
-	
-	try{
-		TITLES = JSON.parse(fs.readFileSync('etc/titles.js', encoding="ascii"));
-	}catch(err){
-	
-	}
-
+		//request the file from a remote server
+		var rem = request(remote);
+		rem.on('data', function(chunk) {
+			file.write(chunk);
+		});
+		
+		rem.on('end', function(){
+		
+		});
+		
+		rem.on('err', function(){
+		
+		});
+		
+		try{
+			TITLES = JSON.parse(fs.readFileSync('etc/titles.js', encoding="ascii"));
+		}catch(err){
+		
+		}
+		//titlesLoad = true;
+	//}
 	//Helper variables to explode the URL then smash it back together.
 	baseUrl = req.url;
 	
@@ -116,10 +112,9 @@ Server.process = function(req, res) {
 			//Get the file and identifies what MIME_TYPE it is to display it.
 			fs.readFile(__dirname + baseUrl, function (err, data) {
 				if(err){ console.log(err); }
-				baseArray = baseUrl.split(".");
-				res.writeHead(200, {'Content-Type': MIME_TYPES[baseArray[baseArray.length-1]]});
-				res.write(data);
-				res.end();
+				res.setHeader("Content-Type", mime.lookup(req.url));
+				res.writeHead(200);
+				res.end(data);
 		  	});
 	  	}
 	  	
