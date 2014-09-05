@@ -9,31 +9,33 @@ Purpose: The entry point to the app.
     <meta charset="utf-8" />
     <title>Stitch - Steam with Twitch</title>
    	<link rel="icon" type="image/x-icon" href="favicon.ico"/>
-    <link rel="stylesheet" href="css/main.css" type="text/css" media="screen" />
-
-    <link href="plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" />
+	<script src="plugins/pace.min.js"></script>
+	<link href="css/pace.css" rel="stylesheet" />
+	
     <script src="plugins/jquery-ui/external/jquery/jquery.js"></script>
 	<script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+	<!--<link href="plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet" />-->
 
 	<script src="plugins/lightSlider/js/jquery.lightSlider.min.js"></script>
-	<link rel="stylesheet" href="plugins/lightSlider/css/lightSlider.css" />
+	<!--<link rel="stylesheet" href="plugins/lightSlider/css/lightSlider.css" />-->
 
-	<link rel="stylesheet" href="plugins/colorbox/colorbox.css" media="screen"/>	
 	<script src="plugins/colorbox/jquery.colorbox-min.js"></script>
+	<!--<link rel="stylesheet" href="plugins/colorbox/colorbox.css" media="screen"/>	-->
+	
+	<link rel="stylesheet" href="css/main.css" type="text/css" media="screen" />
 	
 	<script src="etc/config.js"></script>
 	<script src="core.js"></script>
 </head>
 <body>
 	<header>
-	    <img src="images/StitchLogo.png" alt="Stitch Logo" />
+	    <img src="img/StitchLogo.png" alt="Stitch Logo" />
 	    <div>
 	    	<h1>Steam with Twitch</h1><br />
 	    	<a href="/docs/index.html" target="_blank">Docs</a> | <a href="https://github.com/singular1ty94/Stitch" target="_blank">GitHub</a> | <a href="http://stitch-steam-with-twitch.herokuapp.com/" target="_blank">Live on Heroku</a>
 	    </div>
 	</header>
 	
-	<div id="progressbar"></div>
 	<div id="container">
     	<div id="contentArea"></div>
     	<div id="twitchArea"></div>

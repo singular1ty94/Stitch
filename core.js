@@ -17,13 +17,7 @@ var TITLES = null;
 * assigns JQuery handlers as necessary.
 * @constructor
 */
-function Core(){
-
-	//Attach the progress bar.
-	$("#progressbar").progressbar({
-		value: false
-	});
-	
+function Core(){	
 	
 	//Get our list of corrected Titles from the server.
 	$.get("/?titles", function(data){
@@ -58,9 +52,6 @@ Core.getRSSArticles = function(){
 			content += Core.makeArticle(rssData[i]);		
 		}
 		
-		//End the progress bar
-		$("#progressbar").hide();
-		
     	//Add the content to the div
 		$("#contentArea").html(content);
 		
@@ -94,12 +85,10 @@ Core.getRSSArticles = function(){
 		});
 	}).error(function(jqXHR, textStatus, errorThrown){
 		//On Timeout.
-		//End the progress bar
-		$("#progressbar").hide();
 		processing = false;
 		
 		//Report the error
-		var error = "<br /><p>The server took too long to respond.</p>";
+		var error = "<br /><p>The RSS Feed didn't load. Please refresh your browser.</p>";
 		$("#contentArea").html($("#contentArea").html() + error);
 	});
 };
@@ -115,10 +104,6 @@ Core.getRSSArticles = function(){
 * @param newTitle - May be undefined, the 'corrected' title of the game (see {@linkcode Core.failedPricesAndScore})
 */
 Core.searchSteamStorefront = function(url, caller, newTitle){
-	//Start the progress bar
-	$("#progressbar").show();
-	$("#progressbar").progressbar("option", "value", false);
-
 	$.ajax({
 		url: url,
 		timeout: config.TIMEOUT
@@ -155,12 +140,10 @@ Core.searchSteamStorefront = function(url, caller, newTitle){
 		}
 	}).error(function(jqXHR, textStatus, errorThrown){
 		//On Timeout.
-		//End the progress bar
-		$("#progressbar").hide();
 		processing = false;
 		
 		//Report the error
-		var error = "<br /><p>The server took too long to respond.</p>";
+		var error = "<br /><p>Steam Storefront took too long to respond. Try refreshing your browser.</p>";
 		$("#twitchArea").html($("#twitchArea").html() + error);
 	});
 };
@@ -221,12 +204,10 @@ Core.getPricesAndScore = function(bestGuess, name){
 		
 	}).error(function(jqXHR, textStatus, errorThrown){
 		//On Timeout.
-		//End the progress bar
-		$("#progressbar").hide();
 		processing = false;
 		
 		//Report the error
-		var error = "<br /><p>The server took too long to respond.</p>";
+		var error = "<br /><p>Steam Storefront took too long to respond. Try refreshing your browser.</p>";
 		$("#twitchArea").html($("#twitchArea").html() + error);
 	});
 };
@@ -240,7 +221,6 @@ Core.getPricesAndScore = function(bestGuess, name){
 * @param game - The game's name.
 */
 Core.flyingDutchman = function(game){
-	$("#progressbar").show();
 	
 	//Wake...the KRAKEN
 	$.ajax({
@@ -263,9 +243,8 @@ Core.flyingDutchman = function(game){
 			content += "<br /><br />Nobody's streaming right now.<br />Try again later!";
 		}
 		
-		//Add the content and end the progress bar.
+		//Add the content.
 		$("#twitchArea").html($("#twitchArea").html() + content);
-		$("#progressbar").hide();
 		
 		//Attach the slider.
 		$('#twitchGallery').lightSlider({
@@ -291,12 +270,10 @@ Core.flyingDutchman = function(game){
 		processing = false;	//end the lock
 	}).error(function(jqXHR, textStatus, errorThrown){
 		//On Timeout.
-		//End the progress bar
-		$("#progressbar").hide();
 		processing = false;
 		
 		//Report the error
-		var error = "<br /><p>The server took too long to respond.</p>";
+		var error = "<br /><p>Twitch took too long to respond. Try refreshing your browser.</p>";
 		$("#twitchArea").html($("#twitchArea").html() + error);
 	});
 };
@@ -308,8 +285,6 @@ Core.flyingDutchman = function(game){
 * @param caller - What accordion linked called this?
 */
 Core.failedPricesAndScore = function(caller){
-	//End the progress bar
-	$("#progressbar").hide();
 	
 	//Make the content message.
 	var content = "Stitch couldn't find that game. You might try searching yourself.<br />";

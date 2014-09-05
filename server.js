@@ -39,7 +39,6 @@ var MIME_TYPES = {
 //Load the config file and title file.
 try{
 	eval(fs.readFileSync('etc/config.js', encoding="ascii"));
-	TITLES = JSON.parse(fs.readFileSync('etc/titles.js', encoding="ascii"));
 }catch(err){
 	console.log("[FATAL] Configuration error: " + err);
 }
@@ -57,11 +56,9 @@ function Server() {
   	var port = config.PORT;			//from the config
   	try {
     	http.createServer(Server.process).listen(port, host);
-    	console.log('Server running and live on http://' + host + ':' + port);
-    	return true;
+    	console.log('Server running and live on http://' + host + ':' + port);		
   	}  catch (e) {
     	console.error('Error while creating server:\n\n' + e.stack);
-    	return false;
   	}
 }
 
@@ -73,6 +70,27 @@ function Server() {
 * @param res - Standard response object.
 */
 Server.process = function(req, res) {
+
+	//Fetch the file from Heroku
+	var local = "etc/titles.js";
+	var remote = "http://stitch-steam-with-twitch.herokuapp.com/etc/titles.js";
+	var file = fs.createWriteStream(local);
+
+	//request the file from a remote server
+	var rem = request(remote);
+	rem.on('data', function(chunk) {
+		file.write(chunk);
+	});
+	
+	rem.on('end', function(){
+	
+	});
+	
+	try{
+		TITLES = JSON.parse(fs.readFileSync('etc/titles.js', encoding="ascii"));
+	}catch(err){
+	
+	}
 
 	//Helper variables to explode the URL then smash it back together.
 	baseUrl = req.url;
